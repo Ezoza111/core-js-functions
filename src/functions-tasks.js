@@ -124,8 +124,14 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let result = func();
+  if (result === undefined) {
+    setInterval(() => {
+      result = func();
+    }, attempts);
+  }
+  return result;
 }
 
 /**
@@ -189,8 +195,14 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let getId = startFrom;
+
+  return () => {
+    const result = getId;
+    getId += 1;
+    return result;
+  };
 }
 
 module.exports = {
