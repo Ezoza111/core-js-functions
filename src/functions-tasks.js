@@ -125,13 +125,17 @@ function memoize(/* func */) {
  * retryer() => 2
  */
 function retry(func, attempts) {
-  let result = func();
-  if (result === undefined) {
-    setInterval(() => {
-      result = func();
-    }, attempts);
-  }
-  return result;
+  return () => {
+    let count = attempts;
+    while (count > 0) {
+      try {
+        return func();
+      } catch {
+        count -= 1;
+      }
+    }
+    return 'Attempts is 0';
+  };
 }
 
 /**
